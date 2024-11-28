@@ -14,6 +14,12 @@ def main():
     pygame.init()
     clock = pygame.time.Clock()
     dt = 0
+    counter = 0
+
+    # Initialize font for the scoreboard
+    pygame.font.init()
+    font = pygame.font.Font(None, 36)  # Default font with size 36
+
     # Groups
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     updatable = pygame.sprite.Group()
@@ -34,26 +40,32 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        screen.fill((0,0,0))
-        
+        screen.fill((0, 0, 0))
+
+        # Update all updatable sprites
         for update in updatable:
             update.update(dt)
 
+        # Check collisions
         for asteroid in group_asteroid:
             if asteroid.collision(player):
-                print("Game over!")
+                print(f"Game over! Your score: {counter}")
                 sys.exit()
             for shot in group_shoot:
                 if shot.collision(asteroid):
-                    shot.kill()
-                    asteroid.split()
+                    shot.kill()                  
+                    counter += asteroid.split()
 
-
+        # Draw all drawable sprites
         for drawn in drawable:
             drawn.draw(screen)
 
+        # Render the score and display it at the top-right corner
+        score_text = font.render(f"Score: {counter}", True, (255, 255, 255))  # White text
+        screen.blit(score_text, (SCREEN_WIDTH - score_text.get_width() - 10, 10))  # 10px padding from top-right
+
         pygame.display.flip()
-        dt = clock.tick(60)/1000
+        dt = clock.tick(60) / 1000
 
 if __name__ == "__main__":
-    main()
+    main() 
