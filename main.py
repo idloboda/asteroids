@@ -35,12 +35,19 @@ def main():
 
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     AsteroidField()
-    
+
+    backgroud = pygame.image.load("pictures/purple-space-background-1440-x-1280-7j71thopjowyueye.webp")
+    backgroud = pygame.transform.scale(backgroud, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    backgroud.set_alpha(120)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        screen.fill((0, 0, 0))
+        screen.fill((0,0,0))
+        screen.blit(backgroud, (0, 0))
+
+        # screen.fill(backgroud)
 
         # Update all updatable sprites
         for update in updatable:
